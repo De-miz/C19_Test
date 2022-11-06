@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<title>C19</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+		<meta name="keywords" content="Covid, Covid 19 Data Visualizer, Statistics">
+		<meta name="description" content="Get Your Country's Live Covid-19 Statistics Visualized">
+		<meta name="author" content="Emmanuel Eddie Joshua Kweh (Demiz)">
+	</head>
+	<body>
+		<header>
+			<div class="project_name">C19</div>
+			<div class="sub_heading">Get Your Country's Live Covid-19 Statistics Visualized</div>
+		</header>
+
+		<form class="head_form" method="post" action="">
+			{% csrf_token %}
+			<div class="search">
+				<div class="search_header">Enter the name of your Country eg. <span class="eg">United States</span></div>
+				<input type="text" name="country_name" placeholder="Ghana / Liberia" value="{{ country_name }}"
+				title="Carefully read instructions on Country's input" required>
+				<button type="submit">Visualize</button>
+			</div>
+			{% if iferror == 'error' %}
+			<div style="color: red; font-size: smaller; margin: 0; text-align: center;">
+				Unknown Country!, report bug in comment if so.
+			</div>
+			{% endif %}
+		</form>
+
+		<section>
+			<div class="to">
+				<a href="/about/"><button>Who built C19 >></button></a>
+			</div>
+			<div class="frame" align="center">
+				<div class="visualization1">
+					{% if image_type == 'default' %}
+					<a href="{% static 'topCases.png' %}" target="_blank">
+						<img src="{% static 'topCases.png' %}" title="Top 10 Cases">
+					</a>
+					{% else %}
+					<a href="{% static 'Cases.png' %}" target="_blank">
+						<img src="{% static 'Cases.png' %}" title="Monthly Cases Statistics">
+					</a>
+					{% endif %}
+				</div>
+				<div class="visualization1">
+					{% if image_type == 'default' %}
+					<a href="{% static 'topDeaths.png' %}" target="_blank">
+						<img src="{% static 'topDeaths.png' %}" title="Top 10 Cases">
+					</a>
+					{% else %}
+					<a href="{% static 'Deaths.png' %}" target="_blank">
+						<img src="{% static 'Deaths.png' %}" title="Monthly Cases Statistics">
+					</a>
+					{% endif %}
+				</div>
+				<div class="comment_section">
+					<form class="comment" action="/comment/" method="post">
+						{% csrf_token %}
+						<div><input 
+							name="name" 
+							type="text" 
+							placeholder="Name" 
+							title="I will identify you by this name (incase you're not sure I will, 
+							leave a description in the comments">
+						</div>
+						<div><textarea name="comment" placeholder="Drop a Comment" required></textarea></div>
+						<button type="submit">Send</button>
+					</form>
+					<hr style="border: none; border-top: 3px double blue;">
+					<div class="total_comments">Comments: {{ total_comments }}</div>
+					<ul type="none">
+						{% for i in all_comments reversed %}
+						<li>
+							<div class="comment_header">
+								{{ i.name }}
+								<span>{{ i.date }}</span>
+							</div>
+							<div class="user_comment">{{ i.comment }}</div>
+						</li>
+						<hr style="border: none; border-top: 1px solid rgb(56, 56, 56);">
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</section>
+		<footer>
+			<div class="author">
+				<a href="/about/">Who Built C19</a>
+			</div>
+			<div class="about">
+				<a href="/about/#about">About</a>
+			</div>
+		</footer>
+	</body>
+</html>
+
